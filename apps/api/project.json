@@ -1,0 +1,41 @@
+{
+  "name": "api",
+  "projectType": "application",
+  "sourceRoot": "apps/api/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/node:build",
+      "options": {
+        "outputPath": "dist/apps/api",
+        "main": "apps/api/src/main.ts",
+        "tsConfig": "apps/api/tsconfig.app.json"
+      }
+    },
+    "serve": {
+      "executor": "@nx/node:execute",
+      "options": {
+        "buildTarget": "api:build"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/api"],
+      "options": {
+        "jestConfig": "apps/api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "migration:generate": {
+      "executor": "@nx/node:node",
+      "options": {
+        "command": "typeorm migration:generate apps/api/src/migrations/Init -d apps/api/src/typeorm.config.ts"
+      }
+    },
+    "migration:run": {
+      "executor": "@nx/node:node",
+      "options": {
+        "command": "typeorm migration:run -d apps/api/src/typeorm.config.ts"
+      }
+    }
+  }
+}
