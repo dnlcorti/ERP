@@ -1,0 +1,10 @@
+{
+  "name": "Insurance Workspace",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "forwardPorts": [4200, 3000],
+  "postCreateCommand": "npm install",
+  "remoteUser": "node"
+}

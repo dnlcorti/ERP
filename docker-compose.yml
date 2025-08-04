@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: insurance
+    ports:
+      - '3306:3306'
+  api:
+    image: node:18
+    working_dir: /workspace/ERP
+    volumes:
+      - .:/workspace/ERP
+    command: npm run start:api
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: example
+      DB_NAME: insurance
+      JWT_SECRET: <JWT_SECRET>
+      JWT_REFRESH_SECRET: <JWT_REFRESH_SECRET>
+      FRONTEND_ORIGIN: http://localhost:4200
+    ports:
+      - '3000:3000'
+    depends_on:
+      - db
+  frontend:
+    image: node:18
+    working_dir: /workspace/ERP
+    volumes:
+      - .:/workspace/ERP
+    command: npm run start:frontend
+    environment:
+      NG_APP_API_URL: http://localhost:3000
+      NG_APP_JWT_PUBLIC_KEY: <JWT_PUBLIC_KEY>
+    ports:
+      - '4200:4200'
+    depends_on:
+      - api
